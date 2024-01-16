@@ -990,6 +990,17 @@ bool OpenFileInEditor(const Path &fileName) {
 	return true;
 }
 
+const Path GetCurDirectory() {
+#ifdef _WIN32
+	wchar_t buffer[4096];
+	size_t len = GetCurrentDirectory(sizeof(buffer) / sizeof(wchar_t), buffer);
+	std::string curDir = ConvertWStringToUTF8(buffer);
+	return Path(curDir);
+#else
+	return Path(getcwd());
+#endif
+}
+
 const Path &GetExeDirectory() {
 	static Path ExePath;
 
